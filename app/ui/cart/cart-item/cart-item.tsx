@@ -14,7 +14,6 @@ export default function CartItem({
 }: {
     cartItem: CartItemType
 }) {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL
 
     const dispatch: any = useAppDispatch()
     const { cartItemActionLoading } = useAppSelector(state => state.cart)
@@ -34,8 +33,7 @@ export default function CartItem({
             <div className="grid grid-cols-2 gap-3 text-sm">
                 <div className="flex items-center">
                     <Image
-                      // src={product.image}
-                      src={product.image.startsWith('http') ? product.image : `${API_URL + product.image}`}
+                      src={product.image}
                       width={500}
                       height={500}
                       alt={product.name}
@@ -56,7 +54,7 @@ export default function CartItem({
                                 >
                                 Size: 
                             </span>
-                            <span className="uppercase text-xs"> {sizes[cartItem.size]} </span>
+                            <span className="uppercase text-xs"> {sizes[cartItem.size.size_text]} </span>
                         </p>
                       </div>
                       <div>

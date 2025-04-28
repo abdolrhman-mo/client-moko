@@ -47,6 +47,7 @@ export default function EditAddressForm({
     let handleSubmit = async (e: any) => {
         dispatch(editAddress({ id: address.id, addressData: {
             country: formData.country,
+            governorate: 'Cairo',
             city: formData.city,
             address_text: formData.address_text,
             is_default: formData.is_default,

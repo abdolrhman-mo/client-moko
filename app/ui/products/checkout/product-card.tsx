@@ -26,7 +26,7 @@ export default function ProductCard({
                     className="col-span-2 bg-slate-200 border rounded-md overflow-hidden flex justify-center"
                 >
                     <Image
-                        src={product?.image?.startsWith('http') ? product?.image : `${API_URL + product?.image}`}
+                        src={product?.image}
                         alt={product?.name}
                         width={50}
                         height={50}

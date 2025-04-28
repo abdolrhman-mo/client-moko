@@ -1,49 +1,40 @@
-import { RootState } from "@/redux/store"
 import clsx from "clsx"
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
+
+interface ProductSize {
+    size_text: string
+    quantity: number
+}
+
+interface Product {
+    id: number
+    sizes: ProductSize[]
+}
 
 export default function SizeRadio({
     onChange,
     selectedSize,
     addToCartClicked,
+    product,
 }: {
     onChange?: any
     selectedSize: string
     addToCartClicked: boolean
+    product: Product
 }) {
-    const cartItems = useSelector((state: RootState) => state.cart.items || [])
-    const product = useSelector((state: RootState) => state.products.product)
     const sizes = ['xs', 's', 'm', 'l', 'xl']
-    
     const [availableSizes, setAvailableSizes] = useState<Set<string>>(new Set())
     
     useEffect(() => {
         if (product) {
-            const sizesAvaillable = new Set(
+            const sizesAvailable = new Set<string>(
                 product.sizes
-                    .filter((productSize: any) => {
-                        const existedCartItem = cartItems.find(item => 
-                            item.product.id === product.id && item.size === selectedSize
-                        )
-                        if (existedCartItem) {
-                            return (
-                                productSize.quantity > 0  && existedCartItem?.quantity < productSize.quantity
-                            ) // product quantity > 0  &&  cart item quantity < product quantity
-                        } else {
-                            return (
-                                productSize.quantity > 0
-                            )
-                        }
-                    }
-                    )
-                    .map((productSize: any) => 
-                        productSize.size_text
-                    )
+                    .filter((productSize) => productSize.quantity > 0)
+                    .map((productSize) => productSize.size_text)
             )
-            setAvailableSizes(sizesAvaillable)
+            setAvailableSizes(sizesAvailable)
         }
-    }, [addToCartClicked])
+    }, [product])
 
     return (
         <div className={clsx(
@@ -55,7 +46,7 @@ export default function SizeRadio({
                 'mx-auto md:mx-0',
             )}
         >
-            {sizes.map((size: any) => {
+            {sizes.map((size) => {
                 const isSoldOut = !availableSizes.has(size)
 
                 return (

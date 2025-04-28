@@ -10,6 +10,7 @@ export const updateUserData = async (orderData: OrderRequest) => {
         orderData.address.id,
         {
           country: orderData.address.country,
+          governorate: orderData.address.governorate,
           city: orderData.address.city,
           address_text: orderData.address.address_text,
           is_default: true

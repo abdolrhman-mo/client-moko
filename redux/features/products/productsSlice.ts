@@ -5,10 +5,10 @@ import { fetchProductById, fetchProducts } from './productsThunk'
 interface ProductsState {
   products: ProductType[]
   loading: boolean
-  error: any
+  error: string | null
   product: ProductType | null
   productLoading: boolean
-  productError: any
+  productError: string | null
 }
 
 const initialState: ProductsState = {
@@ -40,12 +40,12 @@ const productsSlice = createSlice({
         state.error = null
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.loading = false
         state.products = action.payload
+        state.loading = false
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false
-        state.error = action.payload
+        state.error = action.error.message || 'Failed to fetch products'
       })
       
       // Fetch Product By Id
@@ -54,12 +54,12 @@ const productsSlice = createSlice({
         state.productError = null
       })
       .addCase(fetchProductById.fulfilled, (state, action) => {
-        state.product = action.payload
+        state.product = action.payload || null
         state.productLoading = false
       })
       .addCase(fetchProductById.rejected, (state, action) => {
         state.productLoading = false
-        state.productError = action.payload
+        state.productError = action.error.message || 'Failed to fetch product'
       })
   },
 })

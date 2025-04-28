@@ -1,13 +1,7 @@
 'use client'
 
 import ProductsList from "@/app/ui/products/products-list"
-import CustomLink from "../common/custom-link"
-import { fetchProductsAPI } from "@/app/lib/services/products/productService"
-import { ProductsListSkeleton } from "../skeletons/products-skeleton"
 import Heading from "../common/heading"
-import { ROUTES } from "@/app/lib/constants/routes"
-import { useAppSelector } from "@/redux/hooks"
-import { ProductType } from "@/app/lib/types/productTypes"
 
 export default function ProductGallery({
   title,

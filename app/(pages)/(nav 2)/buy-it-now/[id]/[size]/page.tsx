@@ -24,11 +24,14 @@ export default function Page({
                 onShowSummary={handleShowSummary}
                 buyItNowId={params.id}
                 buyItNowSize={params.size}
+                shippingPrice={0}
             />
 
             <CheckoutForm 
                 buyItNowId={(params.id)}
                 buyItNowSize={params.size}
+                shippingPrice={0}
+                setShippingPrice={() => {}}
             />
         </div>
     )

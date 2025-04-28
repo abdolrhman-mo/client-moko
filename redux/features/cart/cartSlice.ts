@@ -1,6 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { addItemToCart, changeCartItemQuantity, fetchBuyItNowItem, fetchCartItems, removeItemFromCart } from './cartThunk'
 import { CartItemType } from '@/app/lib/types/cartTypes'
+import { ProductType } from '@/app/lib/types/productTypes'
 import { auth, logout } from '../auth/authThunk'
 
 interface CartState {
@@ -52,7 +53,14 @@ const updateCartItem = (state: CartState, cartItem: CartItemType, newQuantity: n
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
-  reducers: {},
+  reducers: {
+    clearCart: (state) => {
+      state.cartItems = []
+    },
+    setBuyItNowItem: (state, action: PayloadAction<CartItemType | null>) => {
+      state.buyItNowItem = action.payload
+    },
+  },
   extraReducers: (builder) => {
     builder
 
@@ -81,39 +89,20 @@ const cartSlice = createSlice({
       })
       .addCase(addItemToCart.fulfilled, (state, action) => {
         const { cartItem, isChangeQuantity } = action.payload
-        const existingItem = state.cartItems.find(item => 
-          // item.product.id === cartItem?.product.id && item.size === cartItem.size
-          item.id === cartItem?.id
-        )
-
-        console.log('cartSlice cartItem', cartItem)
-        console.log('existingItem', existingItem)
         
-        console.log('isChangeQuantity', isChangeQuantity)
-
-        // item is new in cart(!changeQuantity) => push it to cart items
-        if (!isChangeQuantity) {
-          if (!existingItem && cartItem) {
-            state.cartItems.push(cartItem)
-            state.totalPrice += Number(cartItem.product.price)
-          }
-        }
-        // item is in cart => increase quantity by 1
-        else if (cartItem) {
-          const cartItemId = cartItem.id
-          const newQuantity = cartItem.quantity
-          
-          console.log('cart slice: newQuantity', newQuantity)
-          
-          const itemIndex = state.cartItems.findIndex(item => item.id === cartItemId)
-          if (itemIndex >= 0) {
-            if (newQuantity >= 1)  {
-              state.cartItems[itemIndex].quantity = newQuantity
-              console.log('cart slice: state.cartItems[itemIndex].quantity', state.cartItems[itemIndex].quantity)
-              state.totalPrice += Number(state.cartItems[itemIndex].product.price)
+        if (cartItem) {
+          if (isChangeQuantity) {
+            const index = state.cartItems.findIndex(item => 
+              item.id === cartItem.id
+            )
+            if (index !== -1) {
+              state.cartItems[index] = cartItem
             }
+          } else {
+            state.cartItems.push(cartItem)
           }
         }
+        
         state.addToCartLoading = false
       })
       .addCase(addItemToCart.rejected, (state) => {
@@ -126,11 +115,15 @@ const cartSlice = createSlice({
       })
       .addCase(changeCartItemQuantity.fulfilled, (state, action) => {
         const { cartItemId, newQuantity } = action.payload
-        const cartItem = state.cartItems.find(item => item.id === cartItemId)
+        const index = state.cartItems.findIndex(item => item.id === cartItemId)
         
-        cartItem ? 
-        updateCartItem(state, cartItem, newQuantity) : 
-        console.log(`cart item doesn't exist`)
+        if (index !== -1) {
+          if (newQuantity > 0) {
+            state.cartItems[index].quantity = newQuantity
+          } else {
+            state.cartItems.splice(index, 1)
+          }
+        }
         
         state.cartItemActionLoading = false
       })
@@ -144,16 +137,9 @@ const cartSlice = createSlice({
         state.cartItemActionLoading = true
       })
       .addCase(removeItemFromCart.fulfilled, (state, action) => {
-        // update total price before removing item
-        const cartItem = state.cartItems.find(item =>
-          item.id = action.payload
-        )
-        state.totalPrice -= Number(cartItem?.product.price) * Number(cartItem?.quantity)
-        
-        // remove item
-        state.cartItems = state.cartItems.filter(
-          item => item.id !== action.payload
-        )
+        const cartItemId = action.payload
+        state.cartItems = state.cartItems.filter(item => item.id !== cartItemId)
+        state.cartItemActionLoading = false
       })
       .addCase(removeItemFromCart.rejected, (state, action) => {
         state.cartItemActionLoading = false
@@ -165,7 +151,15 @@ const cartSlice = createSlice({
         state.loading = true
       })
       .addCase(fetchBuyItNowItem.fulfilled, (state, action) => {
-        state.buyItNowItem = action.payload
+        const { product, ...rest } = action.payload
+        if (product) {
+          state.buyItNowItem = {
+            ...rest,
+            product: product as ProductType
+          }
+        } else {
+          state.buyItNowItem = null
+        }
         state.loading = false
       })
       .addCase(fetchBuyItNowItem.rejected, (state, action) => {
@@ -206,5 +200,5 @@ const cartSlice = createSlice({
   }
 })
 
-export const { } = cartSlice.actions
+export const { clearCart, setBuyItNowItem } = cartSlice.actions
 export default cartSlice.reducer

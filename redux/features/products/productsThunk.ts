@@ -1,11 +1,11 @@
-import { fetchProductByIdAPI, fetchProductsAPI } from '@/app/lib/services/products/productService'
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import productsData from '@/app/lib/data/products.json'
 
 export const fetchProducts = createAsyncThunk(
   'products/fetchProducts',
   async (_, { rejectWithValue }) => {
     try {
-      const products = await fetchProductsAPI()
+      const products = productsData
       
       // console.log('thunk: products', products)
 
@@ -20,7 +20,7 @@ export const fetchProductById = createAsyncThunk(
   'products/fetchProductById',
   async (productId: number, { rejectWithValue }) => {
     try {
-      const product = await fetchProductByIdAPI(productId)
+      const product = productsData.find((p: any) => p.id === Number(productId))
       
       // console.log('thunk: product by id', product)
       

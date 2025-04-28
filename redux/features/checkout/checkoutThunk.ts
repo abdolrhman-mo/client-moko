@@ -25,6 +25,7 @@ export const fetchDefaultUserData = createAsyncThunk('order/fetchDefaultUserData
     address: {
       id: 0,
       country: '',
+      governorate: '',
       city: '',
       address_text: '',
     },

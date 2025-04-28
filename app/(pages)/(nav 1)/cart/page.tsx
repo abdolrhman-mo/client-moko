@@ -21,7 +21,7 @@ export default function Page({
     // const query = searchParams?.query || ''
     // const currentPage = Number(searchParams?.page) || 1
     
-    const cartItems = useAppSelector(state => state.cart.items)
+    const cartItems = useAppSelector(state => state.cart.cartItems)
     const totalPrice = useAppSelector(state => state.cart.totalPrice)
     
     return (
@@ -33,7 +33,7 @@ export default function Page({
                     <Heading level={2}>cart</Heading>
                     <Link
                         className="underline"
-                        href={ROUTES.COLLECTIONS.ALL}
+                        href={ROUTES.HOME}
                     >
                         Continiue Shopping
                     </Link>

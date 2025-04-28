@@ -7,11 +7,10 @@ import { hasTag } from '@/app/lib/utils'
 import { ROUTES } from '@/app/lib/constants/routes'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
-import { useAppSelector } from '@/redux/hooks'
 import { ProductsListSkeleton } from '../skeletons/products-skeleton'
+import productsData from '@/app/lib/data/products.json'
 
 export default function ProductsList({
-    // products = [],
     className = '',
     productStyles = '',
     tag = 'all',
@@ -21,19 +20,16 @@ export default function ProductsList({
     query,
     exceptProduct,
 }: {
-  // products?: any[]
-  className?: string
-  productStyles?: string
-  tag?: string
-  limit?: number
-  search?: boolean
-  navSearch?: boolean
-  query?: string
-  exceptProduct?: number
+    className?: string
+    productStyles?: string
+    tag?: string
+    limit?: number
+    search?: boolean
+    navSearch?: boolean
+    query?: string
+    exceptProduct?: number
 }) {
-    const { products, loading, error } = useAppSelector(state => state.products)
-
-    // console.log('component products-list: products', products)
+    const products = productsData
 
     // Search
     let searchedProducts: any = []
@@ -62,7 +58,6 @@ export default function ProductsList({
     let i = 0
     searchedProducts.map((product: any) => {
         if (hasTag(product.tags, tag) || tag === 'all') {
-        // if (product.tag === tag || tag === 'all') {
             if (i < limit) {
                 filteredProducts.push(product)
                 i++
@@ -72,7 +67,6 @@ export default function ProductsList({
     i = 0
 
     // ANIMATIONS
-
     const ref = useRef(null)
     const isInView = useInView(ref, { once: true })
 
@@ -85,8 +79,6 @@ export default function ProductsList({
         }
       }
     }
-
-    // if (loading) return <ProductsListSkeleton count={2} />
 
     return (
         <>
@@ -106,17 +98,14 @@ export default function ProductsList({
                   'opacity-100',
               ) + ` ${className}`}
             >
-              {loading ?
-                <ProductsListSkeleton count={2} /> :
-                filteredProducts.map((product: any) =>
-                  <Product
-                    key={product.id}
-                    product={product}
-                    className={productStyles}
-                    navSearch={navSearch}
-                  />
-                )
-              }
+              {filteredProducts.map((product: any) =>
+                <Product
+                  key={product.id}
+                  product={product}
+                  className={productStyles}
+                  navSearch={navSearch}
+                />
+              )}
             </motion.div>
             
             {/* If it's a searching product list */}

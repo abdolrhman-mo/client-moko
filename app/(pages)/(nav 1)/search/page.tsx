@@ -1,10 +1,10 @@
 'use client'
 
-import { fetchProductsAPI } from "@/app/lib/services/products/productService"
 import Heading from "@/app/ui/common/heading"
 import ProductsList from "@/app/ui/products/products-list"
 import Search from "@/app/ui/search/search"
 import { useEffect, useState } from "react"
+import productsData from '@/app/lib/data/products.json'
 
 export default function Page({
     searchParams,
@@ -20,7 +20,7 @@ export default function Page({
 
     useEffect(() => {
       const getData = async () => {
-        const data = await fetchProductsAPI()
+        const data = productsData
         if (data) {
           setProducts(data)
         }
@@ -36,7 +36,6 @@ export default function Page({
                 <Search placeholder="Search our store" />
 
                 <ProductsList
-                    products={products}
                     className="py-12"
                     limit={8}
                     search={true}

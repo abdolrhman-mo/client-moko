@@ -3,13 +3,9 @@
 import clsx from "clsx"
 import { motion, Variants } from "framer-motion"
 
-import { useSelector, useDispatch } from 'react-redux'
-import { toggleSearchBar, selectSearchBar } from '@/redux/features/nav/searchBarSlice'
-import { selectMobileNav, toggleMobileNav } from "@/redux/features/nav/mobileNavSlice"
-import { selectNavCart, toggleNavCart } from "@/redux/features/nav/navCartSlice"
-import { hideBackgroundShadow, hidePopup, selectBackgroundShadow } from "@/redux/features/popup/popupSlice"
 import { useAppDispatch } from "@/redux/store"
 import { useAppSelector } from "@/redux/hooks"
+import { hidePopup } from "@/redux/features/popup/popupSlice"
 
 export default function Overlay() {
     const dispatch = useAppDispatch()

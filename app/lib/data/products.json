@@ -1,0 +1,77 @@
+[
+    {
+      "id": 1,
+      "name": "Camo Jersey Pink T-Shirt",
+      "price": 299,
+      "image": "/imgs/tshirts/tshirt1.jpg",
+      "description": "A timeless classic pink t-shirt, perfect for any outfit.",
+      "tags": [
+        { "id": 1, "name": "all" },
+        { "id": 2, "name": "classic" },
+        { "id": 3, "name": "casual" },
+        { "id": 4, "name": "new" }
+      ],
+      "sizes": [
+        { "id": 1, "size_text": "s", "quantity": 10, "product": 1 },
+        { "id": 2, "size_text": "m", "quantity": 10, "product": 1 },
+        { "id": 3, "size_text": "l", "quantity": 10, "product": 1 },
+        { "id": 4, "size_text": "xl", "quantity": 10, "product": 1 }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Camo Jersey White T-Shirt",
+      "price": 349,
+      "image": "/imgs/tshirts/tshirt2.jpg",
+      "description": "A vintage white t-shirt, perfect for any outfit.",
+      "tags": [
+        { "id": 1, "name": "all" },
+        { "id": 2, "name": "vintage" },
+        { "id": 3, "name": "casual" },
+        { "id": 4, "name": "new" }
+      ],
+      "sizes": [
+        { "id": 1, "size_text": "s", "quantity": 10, "product": 2 },
+        { "id": 2, "size_text": "m", "quantity": 10, "product": 2 },
+        { "id": 3, "size_text": "l", "quantity": 10, "product": 2 },
+        { "id": 4, "size_text": "xl", "quantity": 10, "product": 2 }
+      ] 
+    },
+    {
+      "id": 3,
+      "name": "Graphic Red T-Shirt",
+      "price": 399,
+      "image": "/imgs/tshirts/tshirt3.jpg",
+      "description": "A graphic red t-shirt, perfect for any outfit.",
+      "tags": [
+        { "id": 1, "name": "jersey" },
+        { "id": 2, "name": "all" },
+        { "id": 3, "name": "casual" }
+      ],
+      "sizes": [
+        { "id": 1, "size_text": "s", "quantity": 10, "product": 3 },
+        { "id": 2, "size_text": "m", "quantity": 10, "product": 3 },
+        { "id": 3, "size_text": "l", "quantity": 10, "product": 3 },
+        { "id": 4, "size_text": "xl", "quantity": 10, "product": 3 }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Camo Jersey Black T-Shirt",
+      "price": 379,
+      "image": "/imgs/tshirts/tshirt4.jpg",
+      "description": "An oversized black t-shirt, perfect for any outfit.",
+      "tags": [
+        { "id": 1, "name": "jersey" },
+        { "id": 2, "name": "all" },
+        { "id": 3, "name": "casual" }
+      ],
+      "sizes": [
+        { "id": 1, "size_text": "s", "quantity": 10, "product": 4 },
+        { "id": 2, "size_text": "m", "quantity": 10, "product": 4 },
+        { "id": 3,  "size_text": "l", "quantity": 10, "product": 4 },
+        { "id": 4, "size_text": "xl", "quantity": 10, "product": 4 }
+      ]
+    }
+]
+  

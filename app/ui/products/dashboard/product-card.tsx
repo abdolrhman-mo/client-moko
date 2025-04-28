@@ -68,7 +68,7 @@ export default function Product({
                                     // Transitions & Animations
                                     'transition-all duration-300 ease-in-out',
                                 )}
-                                src={product.image.startsWith('http') ? product.image : `${API_URL + product.image}`} 
+                                src={product.image} 
                                 alt={product.name}
                                 width={500}
                                 height={500}
