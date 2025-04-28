@@ -3,11 +3,9 @@
 import Table from '../../common/table/table'
 import { NextPage } from 'next'
 import { shippingRateResponse } from '@/app/lib/types/dashboard/shippingRateTypes'
-import { setActivePopup, showBackgroundShadow } from '@/redux/features/popup/popupSlice'
-import { showShippingRateForm } from '@/redux/features/dashboard/shippingRate/shippingRateSlice'
+import { setActivePopup } from '@/redux/features/popup/popupSlice'
 import { useAppSelector } from '@/redux/hooks'
 import { useAppDispatch } from '@/redux/store'
-import { deleteShippingRate, fetchShippingRates } from '@/redux/features/dashboard/shippingRate/shippingRateThunk'
 
 interface Props {
   shippingRates: shippingRateResponse[]
@@ -20,13 +18,12 @@ const ShippingRatesTable: NextPage<Props> = ({ shippingRates = [] }) => {
   const deleteItemLoading = useAppSelector(state => state.shippingRate.deleteItemLoading)
 
   const handleEdit = (shippingRateData: shippingRateResponse) => {
-    dispatch(showBackgroundShadow())
-    dispatch(showShippingRateForm(shippingRateData))
+    dispatch(setActivePopup({ activePopup: 'shippingRateForm' }))
   }
+
+  if (loading) return <p>Loading...</p>
   
   return (
-    loading ?
-    <p>Loading...</p> :
     <Table 
       data={shippingRates?.map((shippingRate) => {
         return {

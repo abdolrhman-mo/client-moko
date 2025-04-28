@@ -8,8 +8,8 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import { useDispatch } from 'react-redux'
 import { toggleSearchBar } from '@/redux/features/nav/searchBarSlice'
-import { Suspense } from 'react';
-import { NavSearchResultsSkeleton } from '@/app/ui/common/skeletons';
+import { Suspense } from 'react'
+import { NavSearchResultsSkeleton } from '../skeletons/skeletons';
 
 export default function Search({
   placeholder,

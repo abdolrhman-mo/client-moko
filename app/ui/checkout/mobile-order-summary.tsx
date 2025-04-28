@@ -4,15 +4,17 @@ import clsx from "clsx";
 import { motion } from "framer-motion"
 
 export default function MobileOrderSummary({
-    showSummary,
-    onShowSummary,
-    buyItNowId,
-    buyItNowSize,
+  showSummary,
+  onShowSummary,
+  buyItNowId,
+  buyItNowSize,
+  shippingPrice,
 }: {
-    showSummary?: any
-    onShowSummary?: any
-    buyItNowId?: number
-    buyItNowSize?: string
+  showSummary?: any
+  onShowSummary?: any
+  buyItNowId?: number
+  buyItNowSize?: string
+  shippingPrice: number | null
 }) {
     const chevron = {
         normal: {
@@ -69,7 +71,7 @@ export default function MobileOrderSummary({
                         'transition-all duration-700 ease-in-out',
                     )}
                 >
-                    <OrderSummary buyItNowId={buyItNowId} buyItNowSize={buyItNowSize} />
+                    <OrderSummary buyItNowId={buyItNowId} buyItNowSize={buyItNowSize} shippingPrice={shippingPrice} />
                 </motion.div>
             </div>
         </>

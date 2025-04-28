@@ -1,6 +1,7 @@
 import { OrderResponse, OrderType } from "@/app/lib/types/orderTypes"
 import { createSlice } from "@reduxjs/toolkit"
-import { fetchUserOrders } from "./orderUserThunk"
+import { fetchUserOrders, placeUserOrder } from "./orderUserThunk"
+import { setActivePopup } from "../popup/popupSlice"
 
 interface OrderState {
   items: OrderResponse[]
@@ -20,6 +21,8 @@ const orderSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+
+      // Fetch User Orders
       .addCase(fetchUserOrders.pending, (state) => {
         state.status = 'loading'
       })
@@ -30,6 +33,17 @@ const orderSlice = createSlice({
       .addCase(fetchUserOrders.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message || 'Failed to fetch cart items'
+      })
+
+      // Prepare Order
+      .addCase(placeUserOrder.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(placeUserOrder.fulfilled, (state) => {
+        state.status = 'idle'
+      })
+      .addCase(placeUserOrder.rejected, (state) => {
+        state.status = 'failed'
       })
   }
 })

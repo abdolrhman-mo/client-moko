@@ -1,13 +1,20 @@
+//          AUTH
+// product response & product request both are the same
+//          NOT AUTH
+// product response
+// cartItem local requests and responses
+
+
 export interface TagType {
   id: number
   name: string
 }
 
 export interface SizeType {
-  id: number
+  id?: number
+  product?: number
   size_text: string
-  quantity: number
-  product: number
+  quantity?: number
 }
 
 export interface ProductType {

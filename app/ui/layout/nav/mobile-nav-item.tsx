@@ -1,9 +1,9 @@
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { useDispatch } from "react-redux"
-import { toggleMobileNav } from "@/redux/features/nav/mobileNavSlice"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import { EXTERNAL_LINKS } from "@/app/lib/constants/appConfig"
+import { useAppDispatch } from "@/redux/store"
+import { hidePopup } from "@/redux/features/popup/popupSlice"
 
 export default function MobileNavItem({
     text,
@@ -16,6 +16,8 @@ export default function MobileNavItem({
     xMark?: boolean
     social?: boolean
 }) {
+    const dispatch = useAppDispatch()
+
     const item = {
         show: {
             opacity: 1,
@@ -29,14 +31,13 @@ export default function MobileNavItem({
             }
         },
     }
-    const dispatch = useDispatch()
 
     if (social) {
         return (
             <motion.div
                 variants={item}
                 className="flex justify-evenly"
-                onClick={() => dispatch(toggleMobileNav())}
+                onClick={() => dispatch(hidePopup())}
             >
                 <div className="border py-4 px-8">
                     <Link href={EXTERNAL_LINKS.INSTAGRAM} target='_blank'>
@@ -58,13 +59,13 @@ export default function MobileNavItem({
             >
                 <XMarkIcon 
                     className='h-6 cursor-pointer' 
-                    onClick={() => dispatch(toggleMobileNav())}
+                    onClick={() => dispatch(hidePopup())}
                 />
             </motion.div>
         )
     }
     return (
-        <motion.div variants={item} onClick={() => dispatch(toggleMobileNav())}>
+        <motion.div variants={item} onClick={() => dispatch(hidePopup())}>
             <Link className="uppercase" href={href}>{text}</Link>
         </motion.div>
     )

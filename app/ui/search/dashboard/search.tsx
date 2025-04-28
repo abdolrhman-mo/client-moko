@@ -6,8 +6,8 @@ import clsx from 'clsx'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { Suspense } from 'react';
-import { NavSearchResultsSkeleton } from '@/app/ui/common/skeletons';
+import { Suspense } from 'react'
+import { NavSearchResultsSkeleton } from '../../skeletons/skeletons';
 
 export default function Search({
   placeholder,

@@ -1,3 +1,5 @@
+import axios from "axios"
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export async function fetchProductsAPI() {
@@ -12,9 +14,20 @@ export async function fetchProductsAPI() {
     return data
 }
 
+export const fetchProductByIdAPI = async (productId: number) => {
+  try {
+    const res = await axios.get(`${API_URL}/products/${productId}/`)
+    
+    // console.log('service: fetched product by id', res.data)
+
+    return res.data
+  } catch (error) {
+    throw new Error('Error fetching product details')
+  }
+}
+
 export const fetchTagsAPI = async () => {
     try {
-        const token = localStorage.getItem('authToken')
         const res = await fetch(`${API_URL}/tags/`, {
             method: 'GET',
             headers: {

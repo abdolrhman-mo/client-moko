@@ -4,15 +4,15 @@ import { fetchUserOrders } from "./orderUserThunk"
 import { changeOrderStatus, fetchAllOrders, fetchOrderInDetailPage } from "./orderAdminThunk"
 
 interface OrderAdminState {
-  items: OrderResponse[]
-  status: 'idle' | 'loading' | 'failed'
+  orders: OrderResponse[]
+  loading: boolean
   error: string | null
   orderInDetailPage: OrderResponse | null
 }
 
 const initialState: OrderAdminState = {
-  items: [],
-  status: 'idle',
+  orders: [],
+  loading: false,
   error: null,
   orderInDetailPage: null
 }
@@ -24,14 +24,14 @@ const orderAdminSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllOrders.pending, (state) => {
-        state.status = 'loading'
+        state.loading = true
       })
       .addCase(fetchAllOrders.fulfilled, (state, action) => {
-        state.items = action.payload
-        state.status = 'idle'
+        state.orders = action.payload
+        state.loading = false
       })
       .addCase(fetchAllOrders.rejected, (state, action) => {
-        state.status = 'failed'
+        state.loading = false
         state.error = action.error.message || 'Failed to fetch cart items'
       })
       .addCase(changeOrderStatus.fulfilled, (state, action) => {

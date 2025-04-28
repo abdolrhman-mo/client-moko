@@ -7,9 +7,11 @@ import { hasTag } from '@/app/lib/utils'
 import { ROUTES } from '@/app/lib/constants/routes'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
+import { useAppSelector } from '@/redux/hooks'
+import { ProductsListSkeleton } from '../skeletons/products-skeleton'
 
 export default function ProductsList({
-    products = [],
+    // products = [],
     className = '',
     productStyles = '',
     tag = 'all',
@@ -19,7 +21,7 @@ export default function ProductsList({
     query,
     exceptProduct,
 }: {
-  products?: any[]
+  // products?: any[]
   className?: string
   productStyles?: string
   tag?: string
@@ -29,6 +31,10 @@ export default function ProductsList({
   query?: string
   exceptProduct?: number
 }) {
+    const { products, loading, error } = useAppSelector(state => state.products)
+
+    // console.log('component products-list: products', products)
+
     // Search
     let searchedProducts: any = []
     if (search) {
@@ -80,6 +86,8 @@ export default function ProductsList({
       }
     }
 
+    // if (loading) return <ProductsListSkeleton count={2} />
+
     return (
         <>
             <motion.div
@@ -98,36 +106,39 @@ export default function ProductsList({
                   'opacity-100',
               ) + ` ${className}`}
             >
-                {filteredProducts.map((product: any) =>
+              {loading ?
+                <ProductsListSkeleton count={2} /> :
+                filteredProducts.map((product: any) =>
                   <Product
                     key={product.id}
                     product={product}
                     className={productStyles}
                     navSearch={navSearch}
                   />
-                )}
+                )
+              }
             </motion.div>
             
             {/* If it's a searching product list */}
-                {
-                    navSearch ? (
-                        <div className="text-center pt-28">
-                            {
-                                filteredProducts.length > 0 ? (
-                                    <CustomLink 
-                                      navSearch={true} 
-                                      href={`${ROUTES.SEARCH}/?query=${query}`}
-                                      className='max-w-fit block' 
-                                    >
-                                      view more
-                                    </CustomLink>
-                                ) : (
-                                    <p>Try searching for something.</p>
-                                )
-                            }
-                        </div>
-                    ) : <></>
-                }
+            {
+              navSearch ? (
+                <div className="text-center pt-28">
+                  {
+                    filteredProducts.length > 0 ? (
+                      <CustomLink 
+                        navSearch={true} 
+                        href={`${ROUTES.SEARCH}/?query=${query}`}
+                        className='max-w-fit block' 
+                      >
+                        view more
+                      </CustomLink>
+                    ) : (
+                      <p>Try searching for something.</p>
+                    )
+                  }
+                </div>
+              ) : <></>
+            }
         </>
     )
 }

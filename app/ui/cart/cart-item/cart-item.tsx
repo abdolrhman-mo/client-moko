@@ -4,7 +4,10 @@ import { useDispatch } from "react-redux"
 import QuantityModifier from "./quantity-modifier"
 import { CartItemType } from "@/app/lib/types/cartTypes"
 import { useAppDispatch } from "@/redux/store"
-import { removeItemFromCart } from "@/redux/features/cart/cartThunk"
+import { changeCartItemQuantity, removeItemFromCart } from "@/redux/features/cart/cartThunk"
+import { XMarkIcon } from "@heroicons/react/24/outline"
+import { useAppSelector } from "@/redux/hooks"
+import { Spinner } from "../../skeletons/skeletons"
 
 export default function CartItem({
     cartItem,
@@ -14,6 +17,7 @@ export default function CartItem({
     const API_URL = process.env.NEXT_PUBLIC_API_URL
 
     const dispatch: any = useAppDispatch()
+    const { cartItemActionLoading } = useAppSelector(state => state.cart)
 
     const product = cartItem.product
 
@@ -25,25 +29,22 @@ export default function CartItem({
         'xl': 'x large',
     }
 
-    const handleRemoveItem = (cartItemId: number) => {
-        dispatch(removeItemFromCart({ cartItemId }))
-    }
-
     return (
         product && (
             <div className="grid grid-cols-2 gap-3 text-sm">
                 <div className="flex items-center">
                     <Image
-                        className="max-h-56 object-contain"
-                        // src={product.image}
-                        src={product.image.startsWith('http') ? product.image : `${API_URL + product.image}`}
-                        width={500}
-                        height={500}
-                        alt={product.name}
+                      // src={product.image}
+                      src={product.image.startsWith('http') ? product.image : `${API_URL + product.image}`}
+                      width={500}
+                      height={500}
+                      alt={product.name}
+                      className="max-h-36 object-contain"
                     />
                 </div>
                 <div className='flex justify-around flex-col'>
-                    <div>
+                    <div className="flex justify-between">
+                      <div className="">
                         <p
                             className='capitalize pb-1'
                         >
@@ -57,12 +58,28 @@ export default function CartItem({
                             </span>
                             <span className="uppercase text-xs"> {sizes[cartItem.size]} </span>
                         </p>
+                      </div>
+                      <div>
+                          {cartItemActionLoading ?
+                            <Spinner className='h-2.5 w-2.5 inline-block' /> :
+                            <button
+                              onClick={() => dispatch(removeItemFromCart({ cartItemId: cartItem.id }))} 
+                              className="cursor-pointer"
+                            >
+                              <XMarkIcon
+                                className="h-3.5 inline-block" 
+                              />
+                            </button>
+                          }
+                      </div>
                     </div>
-                    <QuantityModifier cartItem={cartItem} />
-                    <p dir="rtl">
-                        {product.price} EGP
-                    </p>
-                    <button
+                    <div className="flex justify-between">
+                      <QuantityModifier cartItem={cartItem} />
+                      <p dir="rtl">
+                          {product.price} EGP
+                      </p>
+                    </div>
+                    {/* <button
                         onClick={() => handleRemoveItem(cartItem.id)}
                         className={clsx(
                             // Layout & Sizing
@@ -82,7 +99,7 @@ export default function CartItem({
                         )}
                     >
                         remove
-                    </button>
+                    </button> */}
                 </div>
             </div>
         )

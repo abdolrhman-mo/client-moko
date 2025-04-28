@@ -1,6 +1,12 @@
+import { motion } from "framer-motion"
+import clsx from "clsx"
+import { useAppSelector } from "@/redux/hooks"
+import FloatingContainer from "../common/floating-container"
+
+
 // Loading animation
 const shimmer =
-  'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent';
+  'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent'
 
 export function CardSkeleton() {
   return (
@@ -15,7 +21,7 @@ export function CardSkeleton() {
         <div className="h-7 w-20 rounded-md bg-gray-200" />
       </div>
     </div>
-  );
+  )
 }
 
 export function NavSearchResultsSkeleton() {
@@ -31,7 +37,7 @@ export function NavSearchResultsSkeleton() {
         <div className="h-7 w-20 rounded-md bg-gray-200" />
       </div>
     </div>
-  );
+  )
 }
 
 export function CardsSkeleton() {
@@ -42,7 +48,7 @@ export function CardsSkeleton() {
       <CardSkeleton />
       <CardSkeleton />
     </>
-  );
+  )
 }
 
 export function RevenueChartSkeleton() {
@@ -57,7 +63,7 @@ export function RevenueChartSkeleton() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export function InvoiceSkeleton() {
@@ -72,7 +78,7 @@ export function InvoiceSkeleton() {
       </div>
       <div className="mt-2 h-4 w-12 rounded-md bg-gray-200" />
     </div>
-  );
+  )
 }
 
 export function LatestInvoicesSkeleton() {
@@ -95,7 +101,7 @@ export function LatestInvoicesSkeleton() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export default function DashboardSkeleton() {
@@ -115,7 +121,7 @@ export default function DashboardSkeleton() {
         <LatestInvoicesSkeleton />
       </div>
     </>
-  );
+  )
 }
 
 export function TableRowSkeleton() {
@@ -152,7 +158,7 @@ export function TableRowSkeleton() {
         </div>
       </td>
     </tr>
-  );
+  )
 }
 
 export function InvoicesMobileSkeleton() {
@@ -176,7 +182,7 @@ export function InvoicesMobileSkeleton() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export function InvoicesTableSkeleton() {
@@ -230,5 +236,133 @@ export function InvoicesTableSkeleton() {
         </div>
       </div>
     </div>
-  );
+  )
+}
+
+export function Spinner2({
+  children,
+  name,
+}: {
+  children?: React.ReactNode
+  name: string
+}) {
+  const activePopup = useAppSelector(state => state.popup.activePopup)
+
+  return (
+    <FloatingContainer 
+      className={clsx(
+        'bg-transparent',
+        {
+          'hidden' : activePopup !== name
+        }
+      )}
+    >
+      <div className="flex items-center justify-center space-x-4">
+        <motion.div
+          className="w-7 h-7 border-4 border-black border-t-transparent rounded-full"
+          animate={{ rotate: 360 }}
+          transition={{
+            repeat: Infinity,
+            duration: 1,
+            ease: "linear",
+          }}
+          />
+        <span>
+          {children}
+        </span>
+      </div>
+    </FloatingContainer>
+  )
+}
+
+export function Spinner({
+  className,
+}: {
+  className?: string
+}) {
+  return (
+    <motion.div
+      animate={{ rotate: 360 }}
+      transition={{
+        repeat: Infinity,
+        duration: 1,
+        ease: "linear",
+      }}
+      className={
+        `w-4 h-4 border-2 border-black border-t-transparent rounded-full ${className}`
+      }
+    />
+  )
+}
+
+export function Shimmer ({
+  type = 'box',
+  width = 'w-full',
+  height,
+  elem,
+  className = '',
+}: {
+  type?: 'circle' | 'line' | 'box'
+  width?: string
+  height?: string
+  elem?: string
+  className?: string
+}) {
+  let shape
+  switch (type) {
+    case 'circle':
+      shape = 'rounded-full'
+      break
+    case 'line':
+      shape = 'rounded'
+      height = height || 'h-4'
+      break
+    case 'box':
+    default:
+      shape = 'rounded'
+  }
+
+  // Optionaly define styles by element
+  let elemStyle
+  switch (elem) {
+    case 'h1':
+    case 'h2':
+      elemStyle = 'my-12'
+      height = height || 'h-8'
+      break
+    case 'h3':
+    case 'h4':
+    case 'h5':
+      elemStyle = 'my-4'
+      height = height || 'h-6'
+      break
+    case 'button':
+      height = height || 'h-11'
+      break
+    default:
+      height = height || 'h-4'
+      elemStyle = ''
+  }
+
+  return <div className={`bg-gray-300 ${elemStyle} ${shape} ${width} ${height} ${className} animate-pulse`}></div>
+}
+
+export function ShimmerList ({
+  count,
+  ...props
+}: {
+  count: number
+  type?: 'circle' | 'line' | 'box'
+  width?: string
+  height?: string
+  elem?: string
+  className?: string
+}) {
+  return (
+    <>
+      {Array.from({ length: count }).map((_, index) => (
+        <Shimmer key={index} {...props} />
+      ))}
+    </>
+  )
 }

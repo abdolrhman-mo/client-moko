@@ -53,7 +53,7 @@ export const placeUserOrderAPI = async () => {
 
     const order = await res.json()
 
-    console.log('order placed')
+    console.log('order placed before transformation', order)
 
     const transformedOrder = transformOrderData(order.order_items)
     
@@ -69,17 +69,17 @@ export const addOrderDataAPI = async (
   orderData: OrderRequest,
 ) => {
     try {
+      // console.log('service order data request', orderData)
+
       const res = await fetch(`${API_URL}/orders/users-view/${orderId}/`, {
-        method: 'PATCH',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Token ${localStorage.getItem('authToken')}`
         },
         body: JSON.stringify({
-          user: {
-            first_name: orderData.user.first_name,
-            last_name: orderData.user.last_name
-          },
+          order_first_name: orderData.user.first_name,
+          order_last_name: orderData.user.last_name,
           addressText: orderData.address.address_text,
           city: orderData.address.city,
           country: 'Egypt',
@@ -93,8 +93,6 @@ export const addOrderDataAPI = async (
       }
       
       const order = await res.json()
-
-      console.log('added data to order')
 
       // console.log('add order data before transformation', order)
       

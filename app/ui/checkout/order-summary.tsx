@@ -9,20 +9,17 @@ import { useAppSelector } from '@/redux/hooks'
 import { fetchBuyItNowItem, fetchCartItems } from '@/redux/features/cart/cartThunk'
 
 export default function OrderSummary({
-    buyItNowId,
-    buyItNowSize,
-    shippingPrice,
+  buyItNowId,
+  buyItNowSize,
+  shippingPrice,
 }: {
-    buyItNowId?: number
-    buyItNowSize?: string
-    shippingPrice: number | null
+  buyItNowId?: number
+  buyItNowSize?: string
+  shippingPrice: number | null
 }) {
 
     const dispatch = useAppDispatch()
-    const cartItems = useAppSelector(state => state.cart.items)
-    const totalPrice = useAppSelector(state => state.cart.totalPrice)
-    const status = useAppSelector(state => state.cart.status)
-    const error = useAppSelector(state => state.cart.error)
+    const { cartItems, totalPrice, loading, error } = useAppSelector(state => state.cart)
 
     const buyItNowItem = useAppSelector(state => state.cart.buyItNowItem)
 
@@ -35,7 +32,7 @@ export default function OrderSummary({
     }, [])
 
     return (
-      status === 'loading' ? (
+      loading ? (
         <p>Loading...</p> 
       ) : (
         <div className='grid grid-cols-6 gap-y-4 gap-x-2'>
@@ -55,7 +52,8 @@ export default function OrderSummary({
                 </div>
                 <div className="flex justify-between">
                     <p className=''>Shipping</p>
-                    {shippingPrice ?
+                    {
+                      shippingPrice ?
                       <p className=''>{shippingPrice} EGP</p> :
                       <p>Loading...</p>
                     }
@@ -64,7 +62,7 @@ export default function OrderSummary({
                     <Heading level={5}>total</Heading>
                     {shippingPrice ?
                       <Heading level={5}>{`${totalPrice + shippingPrice} EGP`}</Heading> :
-                      <Heading level={5} className='!lowercase'>choose governorate</Heading>
+                      <Heading level={5} className='!lowercase'>calculating...</Heading>
                     }
                 </div> 
             </div>

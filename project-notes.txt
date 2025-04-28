@@ -11,4 +11,15 @@ Deployment Errors:
 
 
 
-NOW TODO:
+Testing Results:
+- add to cart not working immedietly u have to reload the product detail page for it to work
+- complete order is not working completly(maybe because the downloading)
+- name is not sent to order, neither phone nor address. governorate is not shown in orders page
+- maybe we need to add loading bar at the top of the page or something
+- you may want to complete order but the it gives error: no products in cart because order items 
+  not added to cart server yet
+
+
+preparing order
+
+

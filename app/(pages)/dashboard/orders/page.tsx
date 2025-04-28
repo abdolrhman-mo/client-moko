@@ -18,8 +18,7 @@ export default function Page() {
     const ITEMS_PER_PAGE = 10
 
     const dispatch = useAppDispatch()
-    const orders = useAppSelector(state => state.orderAdmin.items)
-    const status = useAppSelector(state => state.orderAdmin.status)
+    const orders = useAppSelector(state => state.orderAdmin.orders)
     
     const [currentPage, setCurrentPage] = useState(1)
     const [filteredOrders, setFilteredOrders] = useState<OrderResponse[]>(orders)

@@ -13,7 +13,7 @@ export default function SizeRadio({
     addToCartClicked: boolean
 }) {
     const cartItems = useSelector((state: RootState) => state.cart.items || [])
-    const product = useSelector((state: RootState) => state.product.item)
+    const product = useSelector((state: RootState) => state.products.product)
     const sizes = ['xs', 's', 'm', 'l', 'xl']
     
     const [availableSizes, setAvailableSizes] = useState<Set<string>>(new Set())

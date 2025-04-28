@@ -4,10 +4,10 @@ import CartItems from '@/app/ui/cart/cart-items'
 import CustomLink from '../../common/custom-link'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { motion, Variants } from 'framer-motion'
-import { toggleNavCart } from '@/redux/features/nav/navCartSlice'
 import { useAppSelector } from '@/redux/hooks'
 import { ROUTES } from '@/app/lib/constants/routes'
 import { useAppDispatch } from '@/redux/store'
+import { hidePopup } from '@/redux/features/popup/popupSlice'
 
 export default function NavCart() {
     const dispatch = useAppDispatch()
@@ -15,7 +15,7 @@ export default function NavCart() {
     const activePopup = useAppSelector(state => state.popup.activePopup)
     
     const totalPrice = useAppSelector(state => state.cart.totalPrice)
-    const cartItems = useAppSelector(state => state.cart.items)
+    const cartItems = useAppSelector(state => state.cart.cartItems)
 
     let cart: Variants = {
         show: {
@@ -73,7 +73,7 @@ export default function NavCart() {
                 variants={cart}
                 className={clsx(
                     // Layout
-                    'fixed top-0 right-0 z-50 ', 
+                    'fixed right-0 inset-y-0 z-50 ', 
                     // Sizing
                     'h-screen',
                     // Flex
@@ -92,10 +92,10 @@ export default function NavCart() {
                         'py-4 px-4',
                     )}
                 >
-                    <Link href={ROUTES.CART} onClick={() => dispatch(toggleNavCart())}>
+                    <Link href={ROUTES.CART} onClick={() => dispatch(hidePopup())}>
                         <h2 className='text-3xl'>CART</h2>
                     </Link>
-                    <XMarkIcon className='h-6 cursor-pointer' onClick={() => dispatch(toggleNavCart())} />
+                    <XMarkIcon className='h-6 cursor-pointer' onClick={() => dispatch(hidePopup())} />
                 </motion.div>
                 <motion.div
                     variants={cartItem} 

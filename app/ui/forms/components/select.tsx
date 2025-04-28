@@ -1,3 +1,5 @@
+'use client'
+
 import clsx from "clsx"
 import Label from "./label"
 
@@ -12,6 +14,7 @@ export default function Select({
     className = '',
     isProductsSelect  = false,
     label = false,
+    loading = false,
     error,
   }: {
     defaultId?: number | null
@@ -24,6 +27,7 @@ export default function Select({
     className?: string
     isProductsSelect?: boolean
     label?: string | false
+    loading?: boolean
     error?: string | false
 }) {
     return (
@@ -31,7 +35,9 @@ export default function Select({
             {label && (
                 <Label>{label}</Label>
             )}
-            <select
+            {loading ?
+              <p className="text-sm">Loading...</p> :
+              <select
                 className={
                   `text-gray-900 border-1 border-gray-200 text-sm rounded capitalize w-full`
                 }
@@ -39,7 +45,7 @@ export default function Select({
                 onChange={onChange}
                 onBlur={onBlur}
                 required={required}
-            >
+              >
                 {options.map((option, i) => 
                     <option
                         selected={(defaultId && i === defaultId - 1) || (defaultId === null && i === 0) ? true : false}
@@ -52,7 +58,8 @@ export default function Select({
                         {isProductsSelect ? `${option.name} (${option.id})` : option}
                     </option>
                 )}
-            </select>
+              </select>
+            }
             {error && (
               <p className={"text-red-500 text-xs italic mt-2"}>{error}</p>
             )}

@@ -139,12 +139,12 @@ export default function Nav() {
                         </button>
                     </li>
                     <li>
-                        <Link href={ROUTES.HOME}>
+                        <button>
                             <ShoppingBagIcon 
                                 className='h-6 px-2 cursor-pointer' 
                                 onClick={() => dispatch(setActivePopup({ activePopup: 'navCart' }))}    
                             />
-                        </Link>
+                        </button>
                     </li>
                 </ul>
 

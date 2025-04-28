@@ -1,23 +1,23 @@
 import clsx from 'clsx';
+import { Shimmer } from './skeletons';
 
-const shimmer = 'relative overflow-hidden rounded-xl bg-gray-100 p-2 shadow-sm animate-shimmer';
+// const shimmer = 'relative overflow-hidden rounded-xl bg-gray-100 p-2 shadow-sm animate-shimmer'
+const shimmer = ''
 
 export function ProductSkeleton() {
   return (
     <div className={clsx(shimmer, 'flex flex-col items-center justify-center')}>
-      <div className="w-full h-48 bg-gray-200 rounded-md mb-4"></div>
-      <div className="w-full h-6 bg-gray-200 rounded-md mb-2"></div>
-      <div className="w-full h-4 bg-gray-200 rounded-md"></div>
+      <Shimmer height='h-[300px] md:w-[300px]' width='w-[250px] md:h-[350px]' />
+      <Shimmer elem='h4' width='w-3/5' />
+      <Shimmer width='w-1/2' />
     </div>
   )
 }
 
 export function ProductsListSkeleton({ count }: { count: number }) {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-3 md:gap-x-8 gap-y-4">
-      {Array.from({ length: count }).map((_, index) => (
-        <ProductSkeleton key={index} />
-      ))}
-    </div>
-  );
+    Array.from({ length: count }).map((_, index) => (
+      <ProductSkeleton key={index} />
+    ))
+  )
 }

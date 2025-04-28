@@ -4,13 +4,15 @@ import { isAuth } from "@/app/lib/services/auth/authService"
 import { ProductType } from "@/app/lib/types/productTypes"
 import { CartItemType } from "@/app/lib/types/cartTypes"
 import { fetchProductsAPI } from "@/app/lib/services/products/productService"
+import { setActivePopup } from "../popup/popupSlice"
+import { RootState } from "@/redux/store"
 
 export const fetchCartItems = createAsyncThunk('cart/fetchCartItems', async () => {
     let data
     if (isAuth()) {
-        data = await fetchCartItemsAPI()
+      data = await fetchCartItemsAPI()
     } else {
-        data = JSON.parse(localStorage.getItem('cartItems') || '[]')
+      data = JSON.parse(localStorage.getItem('cartItems') || '[]')
     }
     return data
 })
@@ -30,7 +32,9 @@ export const fetchBuyItNowItem = createAsyncThunk('cart/fetchBuyItNowItem', asyn
       id: 0,
       product: product,
       quantity: 1,
-      size: buyItNowSize,
+      size: {
+        size_text: buyItNowSize
+      },
       totalOrderItemsPrice: 0,
   }
   
@@ -39,68 +43,94 @@ export const fetchBuyItNowItem = createAsyncThunk('cart/fetchBuyItNowItem', asyn
 
 export const addItemToCart = createAsyncThunk('cart/addToCart', async (
     { product, size_text }: { product: ProductType; size_text: string },
-    { dispatch }
+    { dispatch, getState }
 ) => {
     const productSizeQuantity = product.sizes.find(size => size.size_text === size_text)?.quantity || 0
+
+    // console.log('CART THUNK')
+    // console.log('productSizeQuantity', productSizeQuantity)
     
     let isAuthVar: boolean = isAuth()
-    let cartItems = isAuthVar ? await fetchCartItemsAPI() : JSON.parse(localStorage.getItem('cartItems') || '[]')
 
-    // Check to see if product w selected size is in the cart
+    const state = getState() as RootState
+
+    const { cartItems } = state.cart
+    if (cartItems.length === 0) dispatch(fetchCartItems())
+
+    // console.log('state cartItems', cartItems)
+
+    // console.log('cartItems[0].size.size_text', cartItems[0].size.size_text)
+
+    // check to see if product w selected size is in the cart
     const existingItem = cartItems.find((item: CartItemType) => 
-        item.product.name === product.name && item.size === size_text
+      item.product.id === product.id && item.size.size_text === size_text
     )
-    let changeQuantity = false
-    let cartItem = null
+
+    let isChangeQuantity = false
+    let cartItem : null | CartItemType = null
 
     if (productSizeQuantity > 0) {
-        // If item in cart
-        if (existingItem) {
-            // Quantity of cartItem < product quantity
-            if (existingItem.quantity < productSizeQuantity) {
-                if (isAuthVar) {
-                    cartItem = await addToCartAPI(product.id, size_text)
-                } else {
-                    existingItem.quantity += 1
-                    // existingItem.totalOrderItemsPrice += Number(existingItem.product.price)
-                    localStorage.setItem('cartItems', JSON.stringify(cartItems))
-                    cartItem = existingItem
-                }
-                changeQuantity = true
-            }
+      if (existingItem) { // if item in cart
+          
+        // console.log('item found in cartItems')
+          
+        // quantity of cartItem < product quantity
+        if (existingItem.quantity < productSizeQuantity) {
+          // console.log('existing')
+          if (isAuthVar) {
+            cartItem = await addToCartAPI(product.id, size_text)
+            // console.log('thunk: added to cart', cartItem)
+          } else {
+            existingItem.quantity += 1
+            // existingItem.totalOrderItemsPrice += Number(existingItem.product.price)
+            localStorage.setItem('cartItems', JSON.stringify(cartItems))
+            cartItem = existingItem
+          }
+          isChangeQuantity = true
+        } else {
+          // console.log('no enough items in the cart')
         }
-        // If item new to cart 
-        else {
-            if (isAuthVar) {
-                cartItem = await addToCartAPI(product.id, size_text)
-            } else {
-                let id = 0
-                if (cartItems.length > 0) id = cartItems[cartItems.length - 1].id + 1
+      }
+      // if item new to cart 
+      else {
+          
+        // console.log('item new in cartItems')
 
-                cartItem = {
-                    id: id,
-                    quantity: 1,
-                    product: product,
-                    size: size_text,
-                    // totalOrderItemsPrice: Number(product.price)
-                    totalOrderItemsPrice: 0
-                }
-                cartItems.push(cartItem)
-                localStorage.setItem('cartItems', JSON.stringify(cartItems))
-            }
+        if (isAuthVar) {
+          cartItem = await addToCartAPI(product.id, size_text)
+        } else {
+          let id = 0
+          if (cartItems.length > 0) id = cartItems[cartItems.length - 1].id + 1
+
+          cartItem = {
+              id: id,
+              quantity: 1,
+              product: product,
+              size: {
+                size_text: size_text,
+              },
+              // totalOrderItemsPrice: Number(product.price)
+              totalOrderItemsPrice: 0
+          }
+          cartItems.push(cartItem)
+          localStorage.setItem('cartItems', JSON.stringify(cartItems))
         }
+      }
     }
-    // dispatch(fetchCartItems())
-    return { cartItem, changeQuantity }
+    
+    dispatch(setActivePopup({ activePopup: 'navCart' }))
+
+    return { cartItem, isChangeQuantity }
 })
 
 export const changeCartItemQuantity = createAsyncThunk('cart/changeCartItemQuantity', async (
     { cartItemId, newQuantity }: { cartItemId: number; newQuantity: number },
     { dispatch }
 ) => {
+    let cartItem
     if (isAuth()) {
         if (newQuantity > 0) {
-            await changeCartItemsQuantityAPI(cartItemId, newQuantity)
+          await changeCartItemsQuantityAPI(cartItemId, newQuantity)
         } else {
             await removeItemFromCartAPI(cartItemId)
         }

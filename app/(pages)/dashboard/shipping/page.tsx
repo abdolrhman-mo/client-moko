@@ -13,7 +13,7 @@ import { useAppSelector } from '@/redux/hooks'
 import { useAppDispatch } from '@/redux/store'
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
-import { hidePopup, setActivePopup } from '@/redux/features/popup/popupSlice'
+import { setActivePopup } from '@/redux/features/popup/popupSlice'
 
 interface Props {}
 

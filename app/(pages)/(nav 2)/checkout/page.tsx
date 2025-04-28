@@ -9,12 +9,20 @@ export default function Page() {
     let handleShowSummary = () => {
         setShowSummary(value => !value)
     }
+    const [shippingPrice, setShippingPrice] = useState<number | null>(null)
 
     return (
         <div className='text-sm text-gray-900'>
-            <MobileOrderSummary showSummary={showSummary} onShowSummary={handleShowSummary} />
+            <MobileOrderSummary 
+              showSummary={showSummary} 
+              onShowSummary={handleShowSummary}
+              shippingPrice={shippingPrice}
+            />
 
-            <CheckoutForm />
+            <CheckoutForm 
+              shippingPrice={shippingPrice}
+              setShippingPrice={setShippingPrice}
+            />
         </div>
     )
 }

@@ -1,6 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-type ActivePopupType = null | 'shippingRateForm' | 'deleteShippingRate' | 'resetShippingRate' | 'deleteLastRateError' | 'navCart' | 'mobileNav'
+type ActivePopupType = 
+  | null 
+  // Shipping Rate
+  | 'shippingRateForm' | 'deleteShippingRate' | 'resetShippingRate' | 'deleteLastRateError' 
+  // Cart
+  | 'navCart' | 'mobileNav' 
+  // Order
+  | 'orderLoading'
 
 interface SetActivePopupPayload {
   activePopup: ActivePopupType
@@ -33,6 +40,7 @@ const popupSlice = createSlice({
     },
     setActivePopup: (state, action: PayloadAction<SetActivePopupPayload>) => {
       const { activePopup, popupPayload } = action.payload
+      // console.log('activePopup', activePopup)
       state.activePopup = activePopup
       state.isOverlayVisible = true
 

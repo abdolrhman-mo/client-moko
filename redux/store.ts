@@ -1,9 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import searchBarReducer from '@/redux/features/nav/searchBarSlice'
-import mobileNavReducer from '@/redux/features/nav/mobileNavSlice'
 import cartReducer from '@/redux/features/cart/cartSlice'
-import navCartReducer from '@/redux/features/nav/navCartSlice'
 import productsReducer from '@/redux/features/products/productsSlice'
 import productReducer from '@/redux/features/products/productSlice'
 import addressReducer from '@/redux/features/address/addressSlice'
@@ -20,8 +18,6 @@ export const makeStore = () => {
     return configureStore({
         reducer: {
             searchBar: searchBarReducer,
-            mobileNav: mobileNavReducer,
-            navCart: navCartReducer,
             cart: cartReducer,
             products: productsReducer,
             product: productReducer,

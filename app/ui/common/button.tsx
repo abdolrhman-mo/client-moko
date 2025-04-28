@@ -3,19 +3,25 @@
 import clsx from "clsx"
 
 export default function Button({
-    className,
-    theme = 'dark',
-    onClick,
-    children,
+  theme = 'dark',
+  onClick,
+  disabled = false,
+  children,
+  className,
 }: {
-    className?: string
-    theme?: 'light' | 'dark' | 'muted' | 'success' | 'warning'
-    onClick?: any
-    children: React.ReactNode
+  theme?: 'light' | 'dark' | 'muted' | 'success' | 'warning'
+  onClick?: any
+  disabled?: boolean
+  children: React.ReactNode
+  className?: string
 }) {
     return (
-        <button type="button" onClick={onClick} className={clsx(
-            'rounded w-full block py-2 px-8 capitalize text-center',
+        <button 
+          type="button"
+          onClick={onClick}
+          disabled={disabled} 
+          className={clsx(
+            'rounded w-full block py-2 px-8 capitalize text-center disabled:opacity-75',
             {
                 'text-black bg-white border' : theme === 'light',
                 'text-white bg-black' : theme === 'dark',

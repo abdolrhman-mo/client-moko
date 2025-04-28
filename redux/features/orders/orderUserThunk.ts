@@ -15,6 +15,7 @@ import { OrderRequest, OrderResponse } from "@/app/lib/types/orderTypes"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { updateUserData } from "./orderUtility"
 import { ROUTES } from "@/app/lib/constants/routes"
+import { hidePopup, setActivePopup } from "../popup/popupSlice"
 
 export const fetchUserOrders = createAsyncThunk('order/fetchUserOrders', async () => {
   const data = await fetchUserOrdersAPI()
@@ -25,6 +26,8 @@ export const placeUserOrder = createAsyncThunk('order/placeUserOrder', async (
   { orderData }: { orderData: OrderRequest },
   { dispatch }
 ) => {
+  dispatch(setActivePopup({ activePopup: 'orderLoading' }))
+
   let order: OrderResponse
   let orderId: number
   if (isAuth()) {
@@ -32,12 +35,13 @@ export const placeUserOrder = createAsyncThunk('order/placeUserOrder', async (
     // CREATING ORDER
 
     order = await placeUserOrderAPI()
-    console.log('order placed after transformation', order)
+    // console.log('thunk: order placed and transformed', order)
     orderId = order.id
     
     // Add new address data and user data to order using patch request
     const orderWithData = await addOrderDataAPI(orderId, orderData)
-    console.log('added data to order', orderWithData)
+    
+    // console.log('thunk: added data to order', orderWithData)
   } else {
 
     // CREATING GUEST ORDER
@@ -59,6 +63,8 @@ export const placeUserOrder = createAsyncThunk('order/placeUserOrder', async (
   await updateUserData(orderData)
 
   abdoRedirect(ROUTES.ORDER_CONFIRMATION(orderId))
+
+  dispatch(hidePopup())
 
   return order
 })

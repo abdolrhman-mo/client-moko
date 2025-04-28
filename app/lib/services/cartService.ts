@@ -17,7 +17,9 @@ export const fetchCartItemsAPI = async () => {
       return []
     }
     let data = await res.json()
-    data = await changeSizes(data)
+    
+    // console.log('cartService: fetchCartItems data', data)
+
     return data
   } catch (error) {
     console.error('Error fetching cart items:', error)
@@ -104,6 +106,6 @@ export const changeCartItemsQuantityAPI = async (
 
 export const syncCartWithServerAPI = async (cartItems: CartItemType[]): Promise<void> => {
   for (const item of cartItems) {
-    await addToCartAPI(item.product.id, item.size)
+    await addToCartAPI(item.product.id, item.size.size_text)
   }
 }

@@ -3,9 +3,11 @@ import { CalendarIcon, ChevronUpIcon, ClipboardDocumentListIcon, CubeIcon, TagIc
 
 export default function InventoryItems({
     inventoryItems,
+    loading,
     products,
-}: {
+  }: {
     inventoryItems: any[]
+    loading: boolean
     products: any[]
 }) {
     // Sort inventory items by newest to oldest
@@ -14,7 +16,7 @@ export default function InventoryItems({
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     )
 
-    console.log(sortedInventoryItems)
+    // console.log(sortedInventoryItems)
 
     const groupedItems = sortedInventoryItems.reduce((acc: { [key: string]: any[] }, item) => {
         const date = new Date(item.created_at).toLocaleDateString()
@@ -24,12 +26,11 @@ export default function InventoryItems({
         acc[date].push(item)
         return acc
     }, {})
+
+    if (loading) return <p>Loading...</p>
     
     return (
         <>
-            <br />
-            <Heading level={4} className="capitalize">Inventory History</Heading>
-            <br />
             {Object.entries(groupedItems).map(([date, items]) => (
                 <div key={date} className="mb-8 text-sm">
                     <Heading level={6}>
